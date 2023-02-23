@@ -14,6 +14,6 @@ namespace Ouvidoria.Models
         [Required(ErrorMessage = "Precisamos do seu perfil")]
         [DisplayName("Tipo de Perfil")]
         public string TipoPerfil { get; set; }
-        public ICollection<Solicitacao> Reclamacoes { get; set; }
+        public ICollection<Solicitacao> Solicitacoes { get; set; }
     }
 }

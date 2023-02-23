@@ -11,6 +11,6 @@ namespace Ouvidoria.Models
         [Required(ErrorMessage = "Precisamos do tipo da solicitação")]
         [DisplayName("Tipo de Reclamação")]
         public string Tipo { get; set; }
-        public ICollection<Solicitacao> Reclamacoes { get; set; }
+        public ICollection<Solicitacao> Solicitacoes { get; set; }
     }
 }

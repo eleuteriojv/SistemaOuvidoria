@@ -6,26 +6,28 @@
 <div class="text-center">
     <h2>Sistema Ouvidoria </h2>
     <hr />
-    <a asp-action="Cadastro" class="btn btn-success">Abrir uma Solicitação</a>
+    <a asp-action="Cadastro" class="btn btn-success">Nova Solicitação</a>
 </div>
 <hr />
-<table id="table" class="table table-bordered">
-    <thead>
+<table id="table" class="table table-sm text-center table-responsive-sm" style="border-radius: 15px">
+    <thead class="thead-light">
         <tr>
-            <th class="col-md-1">
+            <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
-            <th class="col-md-6">
+            <th>
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
-            <th class="col-md-6">
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th class="col-md-4">
+            <th>
                 @Html.DisplayNameFor(model => model.Assunto)
             </th>
-
-            <th></th>
+            <th>
+                Setor
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataCadastro)
+            </th>  
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -39,15 +41,18 @@
                     @Html.DisplayFor(modelItem => item.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => item.Assunto)
                 </td>
                 <td>
-                    <a asp-action="Resposta" asp-route-id="@item.Id">Responder</a> |
-                    <a asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a> |
-                    <a asp-action="Remover" asp-route-id="@item.Id">Remover</a>
+                    @Html.DisplayFor(modelItem => item.Setor.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataCadastro)
+                </td>
+                <td class="btn-group-vertical">
+                    <a class="btn btn-success p-2 text-white" asp-action="EnviarResposta" asp-route-id="@item.Id">Responder</a>
+                    <a class="btn btn-warning p-2 text-white" asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
+                    <a class="btn btn-danger p-2 text-white"  asp-action="Remover" asp-route-id="@item.Id">Remover</a>
                 </td>
             </tr>
         }
@@ -59,10 +64,10 @@
             $('#table').DataTable({
                 "oLanguage": {
                     "sSearch": "",
-                    "sSearchPlaceholder": "Pesquise"
+                    "sSearchPlaceholder": ""
                 },
                 language: {
-                    url: '//cdn.datatables.net/plug-ins/1.10.22/i18n/Portuguese-Brasil.json',
+                    url: '//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json',
                 }
             });
         });

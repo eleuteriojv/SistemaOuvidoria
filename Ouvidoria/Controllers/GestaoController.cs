@@ -8,22 +8,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
+using System.Net;
+using System;
+using System.Xml.Xsl;
+using Ouvidoria.Interfaces;
 
 namespace Ouvidoria.Controllers
 {
     public class GestaoController : Controller
-    {
-        private readonly IConfiguration _configuration;
+    { 
         private readonly OuvidoriaDbContext _context;
-        public GestaoController(OuvidoriaDbContext context, IConfiguration configuration)
+        private readonly IConfigEmail _configEmail;
+        public GestaoController(OuvidoriaDbContext context, IConfigEmail configEmail)
         {
             _context = context;
-            _configuration = configuration;
+            _configEmail = configEmail;
         }
         public IActionResult Index()
         {
-
-            return View(_context.Solicitacoes.AsNoTracking().ToList());
+            return View(_context.Solicitacoes
+                .Include(y => y.Setor)
+                .Include(y => y.Perfil)
+                .Include(y => y.Polos)
+                .Include(y => y.TipoSolicitacoes)
+                .AsNoTracking().ToList());
         }
         [HttpGet]
         public IActionResult Cadastro()
@@ -67,42 +75,81 @@ namespace Ouvidoria.Controllers
         {
             if (ModelState.IsValid)
             {
+                solicitacao.DataCadastro = DateTime.Now;
                 _context.Add(solicitacao);
                 await _context.SaveChangesAsync();
-
-                // Enviar e-mail
-                var assunto = "UMA NOVA OUVIDORIA";
-                var mensagem = $"O contato {solicitacao.Nome} abriu uma ouvidoria com o tipo {solicitacao.TipoReclamacaoId} e o assunto falando de {solicitacao.Assunto}.";
-                await EnviarEmail(solicitacao.Setor.Email, assunto, mensagem);
-
                 return RedirectToAction(nameof(Index));
             }
             return View(solicitacao);
         }
-        public async Task EnviarEmail(string destinatario, string assunto, string mensagem)
+        [HttpGet]
+        public IActionResult EnviarResposta(int id)
         {
-            var smtpServer = _configuration.GetValue<string>("Email:SmtpServer");
-            var smtpPort = _configuration.GetValue<int>("Email:SmtpPort");
-            var smtpUserName = _configuration.GetValue<string>("Email:UserName");
-            var smtpPassword = _configuration.GetValue<string>("Email:Senha");
-            var senderEmail = _configuration.GetValue<string>("Email:E-mail");
-
-            using (var smtpClient = new SmtpClient(smtpServer, smtpPort))
+            if(id == 0)
             {
-                smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new System.Net.NetworkCredential(smtpUserName, smtpPassword);
-                smtpClient.EnableSsl = true;
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(senderEmail, "Sistema Ouvidoria UGB"),
-                    Subject = assunto,
-                    Body = mensagem
-                };
-                mailMessage.To.Add(destinatario);
-
-                await smtpClient.SendMailAsync(mailMessage);
+                return BadRequest();
             }
+            var solicitacao = _context.Solicitacoes
+               .Include(y => y.Setor)
+               .Include(y => y.Polos)
+               .Include(y => y.Perfil)
+               .Include(y => y.TipoSolicitacoes)
+               .Include(y => y.Resposta)
+               .Where(x => x.Id == id).AsNoTracking().FirstOrDefault();
+            var resposta = new Resposta()
+            {
+                SolicitacaoId = solicitacao.Id
+
+            };
+
+            ViewBag.NomeSetor = solicitacao.Setor.Nome;
+            ViewBag.EmailSetor = solicitacao.Setor.Email;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> EnviarResposta(Resposta resposta)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Respostas.Add(resposta);
+                _context.SaveChanges();
+            }
+            if (await _configEmail.EnviarEmail(resposta.Solicitacao.Email, resposta.Mensagem, resposta.Solicitacao.Detalhes))
+            {
+                _context.Respostas.Add(resposta);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+            
+        }
+        [HttpGet]
+        public IActionResult Remover(int id)
+        {
+            var solicitacao = _context.Solicitacoes
+                .Include(y => y.Setor)
+                .Include(y => y.Polos)
+                .Include(y => y.Perfil)
+                .Include(y => y.TipoSolicitacoes)
+                .Where(x => x.Id == id).AsNoTracking().FirstOrDefault();
+            return View(solicitacao);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Remover(Solicitacao solicitacao)
+        {
+            _context.Solicitacoes.Remove(_context.Solicitacoes.Find(solicitacao.Id));
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Detalhes(int id)
+        {
+            var detalhes = _context.Solicitacoes
+                .Include(x => x.Setor)
+                .Include(y => y.Polos)
+                .Include(z => z.TipoSolicitacoes)
+                .Include(w => w.Perfil)
+                .Where(x => x.Id == id).AsNoTracking().FirstOrDefault();
+            return View(detalhes);
         }
     }
 }

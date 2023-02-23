@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Ouvidoria.Data.Mapeamento;
 using Ouvidoria.Data.Seeds;
 using Ouvidoria.Models;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Ouvidoria.Data
 {
@@ -14,10 +14,12 @@ namespace Ouvidoria.Data
         public DbSet<Solicitacao> Solicitacoes { get; set; }
         public DbSet<Setor> Setores { get; set; }
         public DbSet<TipoSolicitacao> TipoSolicitacoes { get; set; }
+        public DbSet<Resposta> Respostas { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.PopulateDataBase();
+            modelBuilder.MapeamentoSolicitacao();
         }
     }
 }

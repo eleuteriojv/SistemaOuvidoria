@@ -1,0 +1,29 @@
+﻿@model Ouvidoria.Models.Resposta
+@{
+    ViewData["Title"] = "Resposta ao Solicitante";
+}
+<form asp-action="EnviarResposta">
+    <div class="col">
+        <h4 class="text-center">Resposta para o Solicitante</h4>
+        <hr />
+        <div class="form-group">
+            <label class="font-weight-bold" asp-for="Setor.Nome"></label>:
+            @ViewBag.NomeSetor
+        </div>
+        <div class="form-group">
+            <label class="font-weight-bold" asp-for="Setor.Email"></label>:
+            @ViewBag.EmailSetor
+        </div>
+        <div class="form-group">
+            <label class="font-weight-bold">Resposta</label>
+            <textarea class="form-control" asp-for="Mensagem"></textarea>
+            <span class="text-danger" asp-validation-for="Mensagem"></span>
+        </div>
+        <br />
+        <hr />
+        <div class="text-center">
+            <button type="submit" class="btn btn-success">Enviar</button>
+            <a asp-controller="Manifestacao" asp-action="Index" class="btn btn-danger">Voltar</a>
+        </div>
+    </div>
+</form>

@@ -1,56 +1,58 @@
-﻿
-@model Ouvidoria.Models.Solicitacao
+﻿@model Ouvidoria.Models.Solicitacao
 @{
     ViewData["Title"] = "Abrir uma Reclamação";
 }
 <div class="text-body">
-    <div>
+    <div class="text-center">
         <h3>Solicitação</h3>
     </div>
     <hr />
-    <form>
-        <div class="form-row">
-            <div class="form-group col-md-4">
+    <form asp-action="Cadastro">
+        <div class="form-group">
+            <div class="form-group">
                 <label asp-for="Nome"></label>
                 <input type="text" class="form-control" asp-for="Nome">
             </div>
-            <div class="form-group col-md-4">
-                <label asp-for="Email"></label>
-                <input type="email" class="form-control" asp-for="Email">
-            </div>
-            <div class="form-group col-md-4">
+            <div class="form-group">
                 <label asp-for="Celular"></label>
                 <input type="tel" class="form-control" asp-for="Celular">
             </div>
-
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label asp-for="PerfilId"></label>
-                <select asp-for=PerfilId class="form-control" asp-items="ViewBag.Perfis"></select>
+                <label asp-for="Perfil.TipoPerfil"></label>
+                <select asp-for="PerfilId" class="form-control" asp-items="ViewBag.Perfis"></select>
             </div>
             <div class="form-group col-md-4">
-                <label asp-for="TipoReclamacaoId"></label>
-                <select asp-for="TipoReclamacaoId" class="form-control" asp-items="ViewBag.TipoSolicitacao"></select>
+                <label asp-for="TipoSolicitacoes.Tipo"></label>
+                <select asp-for="TipoSolicitacaoId" class="form-control" asp-items="ViewBag.TipoSolicitacao"></select>
             </div>
             <div class="form-group col-md-2">
-                <label asp-for="SetorId"></label>
+                <label asp-for="Setor.Nome"></label>
                 <select asp-for="SetorId" class="form-control" asp-items="ViewBag.Setores"></select>
             </div>
             <div class="form-group col-md-2">
-                <label asp-for="PoloId"></label>
+                <label asp-for="Polos.Campus"></label>
                 <select asp-for="PoloId" class="form-control" asp-items="ViewBag.Polos"></select>
             </div>
         </div>
         <div class="form-group">
             <div class="form-group">
                 <label asp-for="Assunto"></label>
-                <input type="textarea" asp-for="Assunto" class="form-control">
+                <input type="text" asp-for="Assunto" class="form-control">
             </div>
         </div>
         <div class="form-group">
+            <label asp-for="Email"></label>
+            <input type="email" class="form-control" asp-for="Email">
+        </div>        
+        <div class="form-group">
+            <label asp-for="Curso">Curso (Opcional)</label>
+            <input type="text" class="form-control" asp-for="Curso">
+        </div>
+        <div class="form-group">
             <label asp-for="Detalhes"></label>
-            <input type="textarea" asp-for="Detalhes" class="form-control">
+            <textarea asp-for="Detalhes" class="form-control"></textarea>
         </div>
         <div class="text-center">
             <input type="submit" value="Cadastrar" class="btn btn-success">

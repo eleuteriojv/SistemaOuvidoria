@@ -1,9 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection;
-using static Ouvidoria.Models.Polo;
-using static Ouvidoria.Models.TipoSolicitacao;
 
 namespace Ouvidoria.Models
 {
@@ -28,19 +25,26 @@ namespace Ouvidoria.Models
         [Required(ErrorMessage = "Precisamos do número de celular")]
         public string Celular { get; set; }
         [Required(ErrorMessage = "Precisamos do seu perfil na instituição")]
-        [DisplayName("Tipo de Perfil")]
+        [DisplayName("Tipo de Perfil*")]
         public int PerfilId { get; set; }
         [Required(ErrorMessage = "Precisamos do setor da solicitação")]
         [DisplayName("Setor")]
         public int SetorId { get; set; }
         [Required(ErrorMessage = "Precisamos do campus")]
-        [DisplayName("Campus")]
+        [DisplayName("Campus*")]
         public int PoloId { get; set; }
         [Required(ErrorMessage = "Precisamos do tipo de solicitação")]
         [DisplayName("Tipos de Solicitação")]
-        public int TipoReclamacaoId { get; set; }
+        public int TipoSolicitacaoId { get; set; }
+        [DisplayName("Curso")]
+        public string Curso { get; set; }
+        [DisplayName("Data de Cadastro")]
+        public DateTime DataCadastro { get; set; }
         public virtual Perfil Perfil { get; set; }
         
         public virtual Setor Setor { get; set; }
+        public virtual Polo Polos { get; set; }
+        public virtual TipoSolicitacao TipoSolicitacoes { get; set; }
+        public virtual Resposta Resposta { get; set; }
     }
 }

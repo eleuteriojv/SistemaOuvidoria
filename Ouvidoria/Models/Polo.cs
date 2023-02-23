@@ -7,8 +7,9 @@ namespace Ouvidoria.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "Precisamos do campus")]
+        [Required(ErrorMessage = "Necessário preencher o campus")]
         public string Campus { get; set; }
-        public ICollection<Solicitacao> Reclamacoes { get; set; }
+        public ICollection<Solicitacao> Solicitacoes { get; set; }
+        
     }
 }

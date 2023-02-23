@@ -16,6 +16,6 @@ namespace Ouvidoria.Models
         [Required(ErrorMessage = "Precisamos do nome do setor")]
         [DisplayName("Nome do Setor")]
         public string Nome { get; set; }
-        public ICollection<Solicitacao> Reclamacoes { get; set; }
+        public ICollection<Solicitacao> Solicitacoes { get; set; }
     }
 }

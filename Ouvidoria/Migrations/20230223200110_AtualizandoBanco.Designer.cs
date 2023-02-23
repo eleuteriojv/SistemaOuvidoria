@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ouvidoria.Data;
 
 namespace Ouvidoria.Migrations
 {
     [DbContext(typeof(OuvidoriaDbContext))]
-    partial class OuvidoriaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230223200110_AtualizandoBanco")]
+    partial class AtualizandoBanco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
