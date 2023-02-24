@@ -2,7 +2,7 @@
 
 namespace Ouvidoria.Interfaces
 {
-    public interface IConfigEmail
+    public interface IEmailService
     {
         Task<bool> EnviarEmail(string destinatario, string assunto, string mensagem);
     }

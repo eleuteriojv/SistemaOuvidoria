@@ -92,19 +92,17 @@ namespace Ouvidoria.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("Atualizado")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Mensagem")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SetorId")
-                        .HasColumnType("int");
 
                     b.Property<int>("SolicitacaoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SetorId");
 
                     b.HasIndex("SolicitacaoId")
                         .IsUnique();
@@ -195,6 +193,9 @@ namespace Ouvidoria.Migrations
                     b.Property<int>("SetorId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TipoSolicitacaoId")
                         .HasColumnType("int");
 
@@ -216,13 +217,14 @@ namespace Ouvidoria.Migrations
                             Id = 1,
                             Assunto = "Atendimento excelente",
                             Celular = "24988677507",
-                            DataCadastro = new DateTime(2023, 2, 23, 17, 1, 10, 64, DateTimeKind.Local).AddTicks(5272),
+                            DataCadastro = new DateTime(2023, 2, 24, 16, 51, 19, 296, DateTimeKind.Local).AddTicks(7418),
                             Detalhes = "Gostei muito do atendimento feito na instituição, atendeu todas as minhas expectativas",
                             Email = "joaovr2012@outlook.com",
                             Nome = "João Vitor Eleutério de Sousa",
                             PerfilId = 1,
                             PoloId = 1,
                             SetorId = 1,
+                            Status = "Aberto",
                             TipoSolicitacaoId = 1
                         });
                 });
@@ -262,17 +264,11 @@ namespace Ouvidoria.Migrations
 
             modelBuilder.Entity("Ouvidoria.Models.Resposta", b =>
                 {
-                    b.HasOne("Ouvidoria.Models.Setor", "Setor")
-                        .WithMany()
-                        .HasForeignKey("SetorId");
-
                     b.HasOne("Ouvidoria.Models.Solicitacao", "Solicitacao")
                         .WithOne("Resposta")
                         .HasForeignKey("Ouvidoria.Models.Resposta", "SolicitacaoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Setor");
 
                     b.Navigation("Solicitacao");
                 });

@@ -1,0 +1,51 @@
+﻿@model Ouvidoria.Models.Resposta
+@{
+    ViewData["Title"] = "Resultado";
+}
+<div class="text-center">
+    <h3>Resultado da Solicitação</h3>
+    <hr />
+</div>
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col">
+            <div class="card" style="border-radius: 15px;">
+                <div class="card-header d-flex justify-content-center align-items-center bg-primary text-white border-bottom-0"
+                     style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                    <h4 class="font-weight-bold">@Model.Solicitacao.Nome</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-row justify-content-start mb-4">
+                        <div class="p-4 ms-3" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
+                            <b>@Model.Solicitacao.Nome</b>
+                            <br />
+                            <p class="small text-left">
+                                @Model.Solicitacao.Detalhes
+                            </p>                            
+                            <p class="text-right" style="font-size:11px">
+                                @Model.Solicitacao.DataCadastro
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-row justify-content-end mb-4">
+                        <div class="p-4 ms-3 border" style="border-radius: 15px; background-color: #fbfbfb;">
+                            <b>@Model.Solicitacao.Setor.Nome - UGB</b>
+                            <br />
+                            <p class="small text-right">@Model.Mensagem</p>
+                            <p class="text-right" style="font-size:11px">
+                                @Model.Atualizado
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<hr />
+<div class="text-center">
+    <a class="btn btn-danger" asp-controller="Gestao" asp-action="Index">Voltar</a>
+    <a class="btn btn-primary" asp-controller="Gestao" asp-action="Detalhes" asp-route-id="@Model.Solicitacao.Id">Mais Informações da Solicitação</a>
+</div>

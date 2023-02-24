@@ -1,29 +1,115 @@
-﻿@model Ouvidoria.Models.Resposta
+﻿@model Ouvidoria.ViewModels.EnviarRespostaViewModel
 @{
     ViewData["Title"] = "Resposta ao Solicitante";
 }
 <form asp-action="EnviarResposta">
-    <div class="col">
-        <h4 class="text-center">Resposta para o Solicitante</h4>
+    <div>
         <hr />
-        <div class="form-group">
-            <label class="font-weight-bold" asp-for="Setor.Nome"></label>:
-            @ViewBag.NomeSetor
-        </div>
-        <div class="form-group">
-            <label class="font-weight-bold" asp-for="Setor.Email"></label>:
-            @ViewBag.EmailSetor
-        </div>
-        <div class="form-group">
-            <label class="font-weight-bold">Resposta</label>
-            <textarea class="form-control" asp-for="Mensagem"></textarea>
-            <span class="text-danger" asp-validation-for="Mensagem"></span>
+        <h3 class="text-center">Solicitante</h3>
+        <hr />
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Nome"></label>:
+                    @Html.DisplayFor(model => model.Nome)
+                    @Html.HiddenFor(model => model.Nome)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Email"></label>:
+                    @Html.DisplayFor(model => model.Email)
+                    @Html.HiddenFor(model => model.Email)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Celular"></label>:
+                    @Html.DisplayFor(model => model.Celular)
+                    @Html.HiddenFor(model => model.Celular)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Campus"></label>:
+                    @Html.DisplayFor(model => model.Campus)
+                    @Html.HiddenFor(model => model.Campus)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Perfil.TipoPerfil"></label>:
+                    @Html.DisplayFor(model => model.Perfil.TipoPerfil)
+                    @Html.HiddenFor(model => model.Perfil.TipoPerfil)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Curso"></label>:
+                    @if (@Model.Curso == null)
+                    {
+                        <label>Optou por não responder</label>
+                    }
+                    @Html.DisplayFor(model => model.Curso)
+                    @Html.HiddenFor(model => model.Curso)
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="TipoSolicitacoes.Tipo"></label>:
+                    @Html.DisplayFor(model => model.TipoSolicitacoes.Tipo)
+                    @Html.HiddenFor(model => model.TipoSolicitacoes.Tipo)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Setor.Nome"></label>:
+                    @Html.DisplayFor(model => model.Setor.Nome)
+                    @Html.HiddenFor(model => model.Setor.Nome)
+                </div>
+                <div class="form-group" hidden>
+                    <label class="font-weight-bold" asp-for="SetorId"></label>
+                    @Html.HiddenFor(model => model.SetorId)
+                </div>      
+                <div class="form-group" hidden>
+                    <label class="font-weight-bold" asp-for="SolicitacaoId"></label>
+                    @Html.HiddenFor(model => model.SolicitacaoId)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Setor.Email"></label>:
+                    @Html.DisplayFor(model => model.Setor.Email)
+                    @Html.HiddenFor(model => model.Setor.Email)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Assunto"></label>:
+                    @Html.DisplayFor(model => model.Assunto)
+                    @Html.HiddenFor(model => model.Assunto)
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Detalhes"></label>:
+                    @Html.DisplayFor(model => model.Detalhes)
+                    @Html.HiddenFor(model => model.Detalhes)
+                </div>
+            </div>
         </div>
         <br />
         <hr />
-        <div class="text-center">
-            <button type="submit" class="btn btn-success">Enviar</button>
-            <a asp-controller="Manifestacao" asp-action="Index" class="btn btn-danger">Voltar</a>
+    </div>
+    <div class="form-group">
+        <h3 class="text-center bg-light rounded">Resposta para o Solicitante</h3>
+        <hr />
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Setor.Nome"></label>:
+                    @ViewBag.NomeSetor
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label class="font-weight-bold" asp-for="Setor.Email"></label>:
+                    @ViewBag.EmailSetor
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Resposta.Mensagem" class="font-weight-bold"></label>
+            <textarea class="form-control" asp-for="Resposta.Mensagem"></textarea>
+            <span class="text-danger" asp-validation-for="Resposta.Mensagem"></span>
+        </div>
+        <br />
+        <hr />
+        <div class="text-center">            
+            <a asp-controller="Gestao" asp-action="Index" class="btn btn-danger">Voltar</a>
+            <input type="submit" value="Enviar" class="btn btn-success" />
         </div>
     </div>
 </form>

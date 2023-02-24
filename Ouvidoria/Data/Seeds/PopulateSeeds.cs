@@ -43,7 +43,8 @@ namespace Ouvidoria.Data.Seeds
                     Celular = "24988677507",
                     Assunto = "Atendimento excelente",
                     Detalhes = "Gostei muito do atendimento feito na instituição, atendeu todas as minhas expectativas",
-                    DataCadastro = DateTime.Now
+                    DataCadastro = DateTime.Now,
+                    Status = "Aberto"
                 }) ;
         }
     }

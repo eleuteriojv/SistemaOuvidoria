@@ -32,7 +32,7 @@ namespace Ouvidoria
             services.AddDbContext<OuvidoriaDbContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("BancoOuvidoria")));
 
-            services.AddScoped<IConfigEmail, ConfigEmailService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

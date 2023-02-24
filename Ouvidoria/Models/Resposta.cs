@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ouvidoria.Models
@@ -7,11 +8,12 @@ namespace Ouvidoria.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "Necessário preencher o campo de mensagem")]
+        [Required(ErrorMessage = "Necessário preencher o campo de resposta")]
         [DisplayName("Resposta")]
         public string Mensagem { get; set; }
+        [DisplayName("Atualizado em")]
+        public DateTime Atualizado { get; set; }
         public int SolicitacaoId { get; set; }
-        public virtual Setor Setor { get; set; }
         public virtual Solicitacao Solicitacao { get; set; }
 
     }

@@ -11,7 +11,7 @@ namespace Ouvidoria.Models
         [DisplayName("SetorId")]
         public int Id { get; set; }
         [Required(ErrorMessage = "Precisamos do E-mail")]
-        [DisplayName("E-mail")]
+        [DisplayName("E-mail do Setor")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Precisamos do nome do setor")]
         [DisplayName("Nome do Setor")]

@@ -76,7 +76,8 @@ namespace Ouvidoria.Migrations
                     PoloId = table.Column<int>(type: "int", nullable: false),
                     TipoSolicitacaoId = table.Column<int>(type: "int", nullable: false),
                     Curso = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -108,44 +109,24 @@ namespace Ouvidoria.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resposta",
+                name: "Respostas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Mensagem = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    SolicitacaoId = table.Column<int>(type: "int", nullable: false),
-                    SetorId = table.Column<int>(type: "int", nullable: true),
-                    PoloId = table.Column<int>(type: "int", nullable: true),
-                    TipoSolicitacaoId = table.Column<int>(type: "int", nullable: true)
+                    Atualizado = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SolicitacaoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Resposta", x => x.Id);
+                    table.PrimaryKey("PK_Respostas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Resposta_Polos_PoloId",
-                        column: x => x.PoloId,
-                        principalTable: "Polos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Resposta_Setores_SetorId",
-                        column: x => x.SetorId,
-                        principalTable: "Setores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Resposta_Solicitacoes_SolicitacaoId",
+                        name: "FK_Respostas_Solicitacoes_SolicitacaoId",
                         column: x => x.SolicitacaoId,
                         principalTable: "Solicitacoes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Resposta_TipoSolicitacoes_TipoSolicitacaoId",
-                        column: x => x.TipoSolicitacaoId,
-                        principalTable: "TipoSolicitacoes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -190,29 +171,14 @@ namespace Ouvidoria.Migrations
 
             migrationBuilder.InsertData(
                 table: "Solicitacoes",
-                columns: new[] { "Id", "Assunto", "Celular", "Curso", "DataCadastro", "Detalhes", "Email", "Nome", "PerfilId", "PoloId", "SetorId", "TipoSolicitacaoId" },
-                values: new object[] { 1, "Atendimento excelente", "24988677507", null, new DateTime(2023, 2, 23, 15, 16, 7, 261, DateTimeKind.Local).AddTicks(3986), "Gostei muito do atendimento feito na instituição, atendeu todas as minhas expectativas", "joaovr2012@outlook.com", "João Vitor Eleutério de Sousa", 1, 1, 1, 1 });
+                columns: new[] { "Id", "Assunto", "Celular", "Curso", "DataCadastro", "Detalhes", "Email", "Nome", "PerfilId", "PoloId", "SetorId", "Status", "TipoSolicitacaoId" },
+                values: new object[] { 1, "Atendimento excelente", "24988677507", null, new DateTime(2023, 2, 24, 16, 51, 19, 296, DateTimeKind.Local).AddTicks(7418), "Gostei muito do atendimento feito na instituição, atendeu todas as minhas expectativas", "joaovr2012@outlook.com", "João Vitor Eleutério de Sousa", 1, 1, 1, "Aberto", 1 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Resposta_PoloId",
-                table: "Resposta",
-                column: "PoloId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Resposta_SetorId",
-                table: "Resposta",
-                column: "SetorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Resposta_SolicitacaoId",
-                table: "Resposta",
+                name: "IX_Respostas_SolicitacaoId",
+                table: "Respostas",
                 column: "SolicitacaoId",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Resposta_TipoSolicitacaoId",
-                table: "Resposta",
-                column: "TipoSolicitacaoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Solicitacoes_PerfilId",
@@ -238,7 +204,7 @@ namespace Ouvidoria.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Resposta");
+                name: "Respostas");
 
             migrationBuilder.DropTable(
                 name: "Solicitacoes");

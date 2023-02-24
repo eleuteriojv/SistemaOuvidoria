@@ -10,7 +10,7 @@ using Ouvidoria.Data;
 namespace Ouvidoria.Migrations
 {
     [DbContext(typeof(OuvidoriaDbContext))]
-    [Migration("20230223181607_AdicionandoBanco")]
+    [Migration("20230224195120_AdicionandoBanco")]
     partial class AdicionandoBanco
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -94,34 +94,22 @@ namespace Ouvidoria.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("Atualizado")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Mensagem")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PoloId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SetorId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SolicitacaoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TipoSolicitacaoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PoloId");
-
-                    b.HasIndex("SetorId");
-
                     b.HasIndex("SolicitacaoId")
                         .IsUnique();
 
-                    b.HasIndex("TipoSolicitacaoId");
-
-                    b.ToTable("Resposta");
+                    b.ToTable("Respostas");
                 });
 
             modelBuilder.Entity("Ouvidoria.Models.Setor", b =>
@@ -207,6 +195,9 @@ namespace Ouvidoria.Migrations
                     b.Property<int>("SetorId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TipoSolicitacaoId")
                         .HasColumnType("int");
 
@@ -228,13 +219,14 @@ namespace Ouvidoria.Migrations
                             Id = 1,
                             Assunto = "Atendimento excelente",
                             Celular = "24988677507",
-                            DataCadastro = new DateTime(2023, 2, 23, 15, 16, 7, 261, DateTimeKind.Local).AddTicks(3986),
+                            DataCadastro = new DateTime(2023, 2, 24, 16, 51, 19, 296, DateTimeKind.Local).AddTicks(7418),
                             Detalhes = "Gostei muito do atendimento feito na instituição, atendeu todas as minhas expectativas",
                             Email = "joaovr2012@outlook.com",
                             Nome = "João Vitor Eleutério de Sousa",
                             PerfilId = 1,
                             PoloId = 1,
                             SetorId = 1,
+                            Status = "Aberto",
                             TipoSolicitacaoId = 1
                         });
                 });
@@ -274,31 +266,13 @@ namespace Ouvidoria.Migrations
 
             modelBuilder.Entity("Ouvidoria.Models.Resposta", b =>
                 {
-                    b.HasOne("Ouvidoria.Models.Polo", "Polo")
-                        .WithMany()
-                        .HasForeignKey("PoloId");
-
-                    b.HasOne("Ouvidoria.Models.Setor", "Setor")
-                        .WithMany()
-                        .HasForeignKey("SetorId");
-
                     b.HasOne("Ouvidoria.Models.Solicitacao", "Solicitacao")
                         .WithOne("Resposta")
                         .HasForeignKey("Ouvidoria.Models.Resposta", "SolicitacaoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ouvidoria.Models.TipoSolicitacao", "TipoSolicitacao")
-                        .WithMany()
-                        .HasForeignKey("TipoSolicitacaoId");
-
-                    b.Navigation("Polo");
-
-                    b.Navigation("Setor");
-
                     b.Navigation("Solicitacao");
-
-                    b.Navigation("TipoSolicitacao");
                 });
 
             modelBuilder.Entity("Ouvidoria.Models.Solicitacao", b =>

@@ -4,83 +4,92 @@
     ViewData["Title"] = "Detalhes";
 }
 
-<h3>Detalhes</h3>
+<h3>Detalhes da Solicitação</h3>
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Assunto): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Assunto):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Assunto)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nome):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Nome)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Detalhes): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Detalhes):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Detalhes)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Celular): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Celular):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Celular)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoSolicitacoes.Tipo): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TipoSolicitacoes.Tipo):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TipoSolicitacoes.Tipo)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Curso): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Curso):
         </dt>
-        <dd class = "col-sm-10">
-            @if(Model.Curso == null)
+        <dd class="col-sm-10">
+            @if (Model.Curso == null)
             {
                 <label>Optou por não preencher</label>
             }
             @Html.DisplayFor(model => model.Curso)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.DataCadastro):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DataCadastro)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Perfil):
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Perfil.TipoPerfil):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Perfil.TipoPerfil)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Setor):
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Setor.Email):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Setor.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Polos.Campus): 
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Polos.Campus):
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Polos.Campus)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Responder" asp-route-id="@Model.Id">Responder</a> |
-    <a asp-action="Index">Voltar para a página principal</a>
+    
+    @if (Model.Resposta != null)
+    {
+        <a class="btn btn-danger" asp-action="Index">Voltar para a página principal</a>
+
+    }
+    else
+    {
+        <a class="btn btn-danger" asp-action="Index">Voltar para a página principal</a>
+        <a class="btn btn-success" asp-action="EnviarResposta" asp-route-id="@Model.Id">Responder</a>
+    }
 </div>

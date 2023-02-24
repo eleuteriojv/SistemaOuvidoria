@@ -36,10 +36,12 @@ namespace Ouvidoria.Models
         [Required(ErrorMessage = "Precisamos do tipo de solicitação")]
         [DisplayName("Tipos de Solicitação")]
         public int TipoSolicitacaoId { get; set; }
-        [DisplayName("Curso")]
+        [DisplayName("Curso (Opcional)")]
         public string Curso { get; set; }
         [DisplayName("Data de Cadastro")]
         public DateTime DataCadastro { get; set; }
+        [DisplayName("Status")]
+        public string Status { get; set; }
         public virtual Perfil Perfil { get; set; }
         
         public virtual Setor Setor { get; set; }

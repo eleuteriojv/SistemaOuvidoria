@@ -12,18 +12,20 @@ using System.Net;
 using System;
 using System.Xml.Xsl;
 using Ouvidoria.Interfaces;
+using Ouvidoria.ViewModels;
 
 namespace Ouvidoria.Controllers
 {
     public class GestaoController : Controller
-    { 
+    {
         private readonly OuvidoriaDbContext _context;
-        private readonly IConfigEmail _configEmail;
-        public GestaoController(OuvidoriaDbContext context, IConfigEmail configEmail)
+        private readonly IEmailService _configEmail;
+        public GestaoController(OuvidoriaDbContext context, IEmailService configEmail)
         {
             _context = context;
             _configEmail = configEmail;
         }
+        [HttpGet]
         public IActionResult Index()
         {
             return View(_context.Solicitacoes
@@ -31,6 +33,7 @@ namespace Ouvidoria.Controllers
                 .Include(y => y.Perfil)
                 .Include(y => y.Polos)
                 .Include(y => y.TipoSolicitacoes)
+                .Include(y => y.Resposta)
                 .AsNoTracking().ToList());
         }
         [HttpGet]
@@ -76,6 +79,7 @@ namespace Ouvidoria.Controllers
             if (ModelState.IsValid)
             {
                 solicitacao.DataCadastro = DateTime.Now;
+                solicitacao.Status = "Aberto";
                 _context.Add(solicitacao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -85,9 +89,9 @@ namespace Ouvidoria.Controllers
         [HttpGet]
         public IActionResult EnviarResposta(int id)
         {
-            if(id == 0)
+            if (id == 0)
             {
-                return BadRequest();
+                return NotFound();
             }
             var solicitacao = _context.Solicitacoes
                .Include(y => y.Setor)
@@ -96,32 +100,45 @@ namespace Ouvidoria.Controllers
                .Include(y => y.TipoSolicitacoes)
                .Include(y => y.Resposta)
                .Where(x => x.Id == id).AsNoTracking().FirstOrDefault();
-            var resposta = new Resposta()
+
+            var enviarResposta = new EnviarRespostaViewModel()
             {
-                SolicitacaoId = solicitacao.Id
-
+                Assunto = solicitacao.Assunto,
+                Campus = solicitacao.Polos.Campus,
+                Celular = solicitacao.Celular,
+                Curso = solicitacao.Curso,
+                Detalhes = solicitacao.Detalhes,
+                Email = solicitacao.Email,
+                Nome = solicitacao.Nome,
+                Perfil = solicitacao.Perfil,
+                Setor = solicitacao.Setor,
+                TipoSolicitacoes = solicitacao.TipoSolicitacoes,
+                SolicitacaoId = solicitacao.Id,
+                SetorId = solicitacao.Setor.Id,
+                Status = solicitacao.Status,
             };
-
-            ViewBag.NomeSetor = solicitacao.Setor.Nome;
-            ViewBag.EmailSetor = solicitacao.Setor.Email;
-            return View();
+            ViewBag.NomeSetor = enviarResposta.Setor.Nome;
+            ViewBag.EmailSetor = enviarResposta.Setor.Email;
+            return View(enviarResposta);
         }
         [HttpPost]
-        public async Task<IActionResult> EnviarResposta(Resposta resposta)
+        public async Task<IActionResult> EnviarResposta(EnviarRespostaViewModel enviarResposta)
         {
             if (ModelState.IsValid)
             {
-                _context.Respostas.Add(resposta);
-                _context.SaveChanges();
+                if (await _configEmail.EnviarEmail(enviarResposta.Email, enviarResposta.Assunto, enviarResposta.Resposta.Mensagem))
+                {
+                    enviarResposta.Resposta.SolicitacaoId = enviarResposta.SolicitacaoId;
+                    enviarResposta.Resposta.Atualizado = DateTime.Now;
+                    var solicitacao = _context.Solicitacoes.Where(x => x.Id == enviarResposta.SolicitacaoId).FirstOrDefault();
+                    solicitacao.Status = "Finalizado";
+                    _context.Solicitacoes.Update(solicitacao);
+                    _context.Respostas.Add(enviarResposta.Resposta);
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            if (await _configEmail.EnviarEmail(resposta.Solicitacao.Email, resposta.Mensagem, resposta.Solicitacao.Detalhes))
-            {
-                _context.Respostas.Add(resposta);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            return View();
-            
+            return View(enviarResposta);
         }
         [HttpGet]
         public IActionResult Remover(int id)
@@ -141,6 +158,7 @@ namespace Ouvidoria.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
         public async Task<IActionResult> Detalhes(int id)
         {
             var detalhes = _context.Solicitacoes
@@ -148,8 +166,21 @@ namespace Ouvidoria.Controllers
                 .Include(y => y.Polos)
                 .Include(z => z.TipoSolicitacoes)
                 .Include(w => w.Perfil)
+                .Include(t => t.Resposta)
                 .Where(x => x.Id == id).AsNoTracking().FirstOrDefault();
             return View(detalhes);
+        }
+        [HttpGet]
+        public IActionResult Resultado(int id)
+        {
+            return View(_context.Respostas
+                .Include(y => y.Solicitacao)
+                    .ThenInclude(z => z.Setor)
+                .Include(y => y.Solicitacao)
+                    .ThenInclude(z => z.Polos)
+                .Include(y => y.Solicitacao)
+                    .ThenInclude(z => z.TipoSolicitacoes)
+                .Where(x => x.Id == id).AsNoTracking().FirstOrDefault());
         }
     }
 }

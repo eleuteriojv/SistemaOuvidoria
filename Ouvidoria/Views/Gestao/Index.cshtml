@@ -19,14 +19,17 @@
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Assunto)
+                @Html.DisplayNameFor(model => model.Setor.Nome)
             </th>
             <th>
-                Setor
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoSolicitacoes.Tipo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DataCadastro)
-            </th>  
+            </th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -41,18 +44,37 @@
                     @Html.DisplayFor(modelItem => item.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Assunto)
+                    @Html.DisplayFor(modelItem => item.Setor.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Setor.Nome)
+                    @if(item.Status == "Aberto")
+                    {
+                        <label class="text-danger">@Html.DisplayFor(modelItem => item.Status)</label>
+                    }
+                    @if(item.Status == "Finalizado")
+                    {
+                        <label class="text-success">@Html.DisplayFor(modelItem => item.Status)</label>
+                    }
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoSolicitacoes.Tipo)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DataCadastro)
                 </td>
                 <td class="btn-group-vertical">
-                    <a class="btn btn-success p-2 text-white" asp-action="EnviarResposta" asp-route-id="@item.Id">Responder</a>
-                    <a class="btn btn-warning p-2 text-white" asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
-                    <a class="btn btn-danger p-2 text-white"  asp-action="Remover" asp-route-id="@item.Id">Remover</a>
+                    @if (item.Resposta != null)
+                    {
+                        <a class="btn btn-success p-2 text-white" asp-action="Resultado" asp-route-id="@item.Id">Resultado</a>
+
+                    }
+                    else
+                    {
+                        <a class="btn btn-success p-2 text-white" asp-action="EnviarResposta" asp-route-id="@item.Id">Responder</a>
+                        <a class="btn btn-warning p-2 text-white" asp-action="Detalhes" asp-route-id="@item.Id">Detalhes</a>
+                        <a class="btn btn-danger p-2 text-white" asp-action="Remover" asp-route-id="@item.Id">Remover</a>
+                    }
                 </td>
             </tr>
         }
@@ -63,7 +85,6 @@
         $(document).ready(function () {
             $('#table').DataTable({
                 "oLanguage": {
-                    "sSearch": "",
                     "sSearchPlaceholder": ""
                 },
                 language: {

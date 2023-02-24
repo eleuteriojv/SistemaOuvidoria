@@ -9,7 +9,7 @@ namespace Ouvidoria.Models
         [Key]
         public int Id { get; set; }
         [Required(ErrorMessage = "Precisamos do tipo da solicitação")]
-        [DisplayName("Tipo de Reclamação")]
+        [DisplayName("Tipo de Solicitação")]
         public string Tipo { get; set; }
         public ICollection<Solicitacao> Solicitacoes { get; set; }
     }
